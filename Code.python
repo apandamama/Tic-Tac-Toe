@@ -1,0 +1,107 @@
+Board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+Game = False
+Draw = False
+Valid_input = False
+Player = "X"
+
+def print_row(Num, R):
+    S = str(Num) + " ["
+    if R[0] == 0:
+        S += "-"
+    if R[0] == "X":
+        S += "X"
+    if R[0] == "0":
+        S += "0"
+    S += " "
+
+    if R[1] == 0:
+        S += "-"
+    if R[1] == "X":
+        S += "X"
+    if R[1] == "0":
+        S += "0"
+    S += " "
+
+    if R[2] == 0:
+        S += "-"
+    if R[2] == "X":
+        S += "X"
+    if R[2] == "0":
+        S += "0"
+    S += "]"
+    return S
+
+def print_board(B):
+
+    print("   0 1 2 (y)")
+    print(print_row(0, B[0]))
+    print(print_row(1, B[1]))
+    print(print_row(2, B[2]))
+
+def check_winning_cond(B):
+    if B[0][0] == B[0][1] and B[0][1] == B[0][2] and B[0][0] != 0:
+        return True
+    if B[1][0] == B[1][1] and B[1][1] == B[1][2] and B[1][0] != 0:
+        return True
+    if B[2][0] == B[2][1] and B[2][1] == B[2][2] and B[2][0] != 0:
+        return True
+
+
+    if B[0][0] == B[1][0] and B[1][0] == B[2][0] and B[0][0] != 0:
+        return True
+    if B[0][1] == B[1][1] and B[1][1] == B[2][1] and B[0][1] != 0:
+        return True
+    if B[0][2] == B[1][2] and B[1][2] == B[2][2] and B[0][2] != 0:
+        return True
+
+    if B[0][0] == B[1][1] and B[1][1] == B[2][2] and B[0][0] != 0:
+        return True
+    if B[0][2] == B[1][1] and B[1][1] == B[2][0] and B[0][2] != 0:
+        return True
+    return False
+
+def check_draw_cond(B):
+    if B[0][0] != 0 and B[0][1] != 0 and B[0][2] != 0 and B[1][0] != 0 and B[1][1] != 0 and B[1][2] != 0 and B[2][0] != 0 and B[2][1] != 0 and B[2][2] != 0:
+        print("draw: true")
+        return True
+    print("draw: false")
+    return False
+
+print("Cross starts")
+while Game == False:
+    print_board(Board)
+    Valid_input = False
+    while Valid_input == False:
+        inp = input(f"{Player} make your turn x,y: ")
+        if "," not in inp:
+            continue
+        A = inp.split(",")
+        x = int(A[0])
+        y = int(A[1])
+        if x >= 0 and x <= 2 and y >= 0 and y <=2:
+            if Board[x][y] == 0:
+                Valid_input = True
+            else:
+                print("Field is not free")
+        else:
+            print("Input must be 0, 1 or 2")
+    Board[x][y] = Player
+    Game = check_winning_cond(Board)
+    if Game == False:
+        if Player == "X":
+            Player = "0"
+        else:
+            Player = "X"
+
+    if Game == False:
+        Draw = check_draw_cond(Board)
+        if Draw == True:
+            Game = True
+
+
+if Draw == False:
+    print(f"Player {Player} has won the game")
+    print_board(Board)
+else:
+    print("No one has won the game")
+    print_board(Board)
